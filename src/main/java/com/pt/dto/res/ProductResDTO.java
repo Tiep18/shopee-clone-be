@@ -33,9 +33,8 @@ public class ProductResDTO {
     private LocalDateTime updatedAt;
     private List<String> images;
 
-
     public ProductResDTO(Product product) {
-        final String URL_PREFIX = "http://localhost:8080/images/";
+        final String URL_PREFIX = "https://s3.ap-southeast-1.amazonaws.com/shopee-clone/product/";
         images = product.getImages().stream().map(image -> URL_PREFIX + image.getName())
                 .collect(Collectors.toList());
         id = (product.getId());

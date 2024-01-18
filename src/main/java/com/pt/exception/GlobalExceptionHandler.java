@@ -81,11 +81,11 @@ public class GlobalExceptionHandler {
         );
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ResponseDTO> handleOtherException(Exception ex) {
-//        System.out.println("----------lot vao day");
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                .body(new ResponseDTO(ex.getMessage()));
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ResponseDTO> handleOtherException(Exception ex) {
+        System.out.println("----------lot vao day");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseDTO(ex.getMessage()));
+    }
 
 }

@@ -55,7 +55,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account register(RegisterReqDto registerReqDto) throws Exception {
-
         // check if username already exists
         Account foundAccount = accountRepo.findByEmail(registerReqDto.getEmail());
         if (foundAccount != null) {
@@ -81,7 +80,6 @@ public class AccountServiceImpl implements AccountService {
                 }
             });
         }
-
         // hash password
         String password = passwordEncoder.encode(registerReqDto.getPassword());
         account.setPassword(password);

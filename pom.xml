@@ -79,6 +79,12 @@
             <version>2.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>1.11.133</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -96,6 +102,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>myspringapp</finalName>
     </build>
 
 </project>

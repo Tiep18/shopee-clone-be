@@ -28,7 +28,7 @@ public class FileUploadController {
     private AccountService accountService;
 
     // Upload avatar
-    @PostMapping(value = "/user/upload-avatar", consumes = {"multipart/form-data"})
+    @PostMapping(value = "/user/upload-avatar-local", consumes = {"multipart/form-data"})
     public ResponseEntity<ResponseDTO> uploadAvatar(@RequestParam("image") MultipartFile image,
                                                     Authentication authentication) throws Exception {
         Account account = accountService.findByEmail(authentication.getName());
