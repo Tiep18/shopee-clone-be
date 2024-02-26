@@ -31,11 +31,30 @@ public class JwtProvider {
         return generateToken(authentication, rtSecurityKey, rtExpiredTime);
     }
 
+    public String generateAtToken(String email) {
+        return generateToken(email, atSecurityKey, atExpiredTime);
+    }
+
+    public String generateRtToken(String email) {
+        return generateToken(email, rtSecurityKey, rtExpiredTime);
+    }
+
     public String generateToken(Authentication authen, String securityKey, long expiration) {
         Date tokenCreateTime = new Date();
         Date tokenExpiredTime = new Date(new Date().getTime() + expiration);
         return Jwts.builder()
                 .setSubject(authen.getName()).claim("role", authen.getAuthorities())
+                .setIssuedAt(tokenCreateTime)
+                .setExpiration(tokenExpiredTime)
+                .signWith(SignatureAlgorithm.HS256, securityKey)
+                .compact();
+    }
+
+    public String generateToken(String email, String securityKey, long expiration) {
+        Date tokenCreateTime = new Date();
+        Date tokenExpiredTime = new Date(new Date().getTime() + expiration);
+        return Jwts.builder()
+                .setSubject(email).claim("role", "USER")
                 .setIssuedAt(tokenCreateTime)
                 .setExpiration(tokenExpiredTime)
                 .signWith(SignatureAlgorithm.HS256, securityKey)

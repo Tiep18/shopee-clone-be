@@ -1,6 +1,7 @@
 package com.pt.security;
 
 import com.pt.jwt.JwtAuthenticationFilter;
+import com.pt.security.oauth.Oauth2LoginSuccessHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,9 @@ public class SecurityConfig {
     @Autowired
     private CustomLogoutHandler customLogoutHandler;
 
+    @Autowired
+    Oauth2LoginSuccessHandler oauth2LoginSuccessHandler;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -52,15 +56,21 @@ public class SecurityConfig {
         httpSecurity.cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable).sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .exceptionHandling(authentication -> authentication
                         .authenticationEntryPoint(customAuthenticationEntryPoint)
                         .accessDeniedHandler(new CustomAccessDeniedHandler()))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/register").permitAll())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/register", "/oauth2/**", "/auth/**").permitAll())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/login").permitAll())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/images/**", "/products/**", "/categories/**").permitAll())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/refresh-access-token").permitAll())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/accounts/**").hasRole("ADMIN"))
-                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated()
+                ).oauth2Login(oauth2 -> {
+                    oauth2.successHandler(oauth2LoginSuccessHandler);
+                    oauth2.authorizationEndpoint(auth -> auth.baseUri("/oauth2/authorize"));
+                });
+
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         httpSecurity
                 .logout(logout -> logout.addLogoutHandler(customLogoutHandler).permitAll()

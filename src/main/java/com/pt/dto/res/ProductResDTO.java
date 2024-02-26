@@ -34,7 +34,7 @@ public class ProductResDTO {
     private List<String> images;
 
     public ProductResDTO(Product product) {
-        final String URL_PREFIX = "https://s3.ap-southeast-1.amazonaws.com/shopee-clone/product/";
+        final String URL_PREFIX = "https://s3.ap-southeast-1.amazonaws.com/shopee-clone-bucket/product/";
         images = product.getImages().stream().map(image -> URL_PREFIX + image.getName())
                 .collect(Collectors.toList());
         id = (product.getId());
